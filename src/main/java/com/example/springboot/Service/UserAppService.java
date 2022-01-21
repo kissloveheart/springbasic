@@ -15,4 +15,6 @@ public interface UserAppService {
     UserAppCommand findCommandByEmail(String email);
     UserAppCommand saveUserAppCommand(UserAppCommand userAppCommand);
 
+    Boolean deleteUser(Long id);
+
 }

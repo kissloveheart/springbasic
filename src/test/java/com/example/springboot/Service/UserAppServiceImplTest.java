@@ -6,6 +6,7 @@ import com.example.springboot.model.UserApp;
 import com.example.springboot.repository.UserAppRepository;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
+
 class UserAppServiceImplTest {
 
     @InjectMocks
@@ -36,7 +37,7 @@ class UserAppServiceImplTest {
     UserAppToUserAppCommand userAppToUserAppCommand;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }

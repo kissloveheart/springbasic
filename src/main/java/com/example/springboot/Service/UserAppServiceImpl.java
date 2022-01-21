@@ -63,6 +63,9 @@ public class UserAppServiceImpl implements UserAppService{
     @Transactional
     public UserAppCommand findCommandByEmail(String email) {
         UserApp userApp = findByEmail(email);
+        if(userApp == null){
+            return null;
+        }
         userApp.getRoleSet().forEach(userApp::addRole);
         return userAppToUserAppCommand.convert(userApp);
     }
@@ -74,5 +77,15 @@ public class UserAppServiceImpl implements UserAppService{
         UserApp saveUser = userAppRepository.save(detachedUser);
         log.info("Save the user ID: "+saveUser.getId());
         return userAppToUserAppCommand.convert(saveUser);
+    }
+
+    @Override
+    public Boolean deleteUser(Long id) {
+        Optional<UserApp> userAppOptional = userAppRepository.findById(id);
+        if (!userAppOptional.isPresent()){
+            return false;
+        }
+        userAppRepository.deleteById(id);
+        return true;
     }
 }
