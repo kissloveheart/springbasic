@@ -1,9 +1,11 @@
 package com.example.springboot.Service;
 
 import com.example.springboot.command.UserAppCommand;
+import com.example.springboot.converter.UserAppCommandToUserApp;
 import com.example.springboot.converter.UserAppToUserAppCommand;
 import com.example.springboot.model.UserApp;
 import com.example.springboot.repository.UserAppRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +14,16 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class UserAppServiceImpl implements UserAppService{
     private final UserAppRepository userAppRepository;
     private final UserAppToUserAppCommand userAppToUserAppCommand;
+    private final UserAppCommandToUserApp userAppCommandToUserApp;
 
-    public UserAppServiceImpl(UserAppRepository userAppRepository, UserAppToUserAppCommand userAppToUserAppCommand) {
+    public UserAppServiceImpl(UserAppRepository userAppRepository, UserAppToUserAppCommand userAppToUserAppCommand, UserAppCommandToUserApp userAppCommandToUserApp) {
         this.userAppRepository = userAppRepository;
         this.userAppToUserAppCommand = userAppToUserAppCommand;
+        this.userAppCommandToUserApp = userAppCommandToUserApp;
     }
 
 
@@ -33,7 +38,8 @@ public class UserAppServiceImpl implements UserAppService{
     public UserApp findById(Long Id) {
         Optional<UserApp> userAppOptional = userAppRepository.findById(Id);
         if(!userAppOptional.isPresent()){
-            throw new RuntimeException("UserApp is not found");
+            //throw new RuntimeException("UserApp is not found");
+            return null;
         }
         return userAppOptional.get();
     }
@@ -62,7 +68,11 @@ public class UserAppServiceImpl implements UserAppService{
     }
 
     @Override
-    public void save(UserApp userApp) {
-
+    @Transactional
+    public UserAppCommand saveUserAppCommand(UserAppCommand userAppCommand) {
+        UserApp detachedUser = userAppCommandToUserApp.convert(userAppCommand);
+        UserApp saveUser = userAppRepository.save(detachedUser);
+        log.info("Save the user ID: "+saveUser.getId());
+        return userAppToUserAppCommand.convert(saveUser);
     }
 }

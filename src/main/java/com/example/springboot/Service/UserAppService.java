@@ -13,6 +13,6 @@ public interface UserAppService {
 
     UserAppCommand findCommandById(Long id);
     UserAppCommand findCommandByEmail(String email);
-    void save(UserApp userApp);
+    UserAppCommand saveUserAppCommand(UserAppCommand userAppCommand);
 
 }

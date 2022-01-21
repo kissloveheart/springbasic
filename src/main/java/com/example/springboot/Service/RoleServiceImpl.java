@@ -5,6 +5,7 @@ import com.example.springboot.model.UserApp;
 import com.example.springboot.repository.RoleRepository;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -14,11 +15,10 @@ import java.util.Set;
 @Service
 @Slf4j
 public class RoleServiceImpl implements RoleService {
-    private final RoleRepository roleRepository;
 
-    public RoleServiceImpl(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
+    @Autowired
+    private RoleRepository roleRepository;
+
 
     @Override
     public Set<Role> getRoleListFromUserApp(UserApp userApp) {
