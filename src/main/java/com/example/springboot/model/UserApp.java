@@ -18,7 +18,7 @@ import java.util.Set;
         @UniqueConstraint(name = "Email_Uk",columnNames = "email")})
 public class UserApp {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "User_Id")
     private Long id;
     @Column(unique = true, nullable = false)
@@ -29,7 +29,7 @@ public class UserApp {
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private Date createDate = new Date();
     private boolean enabled;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinTable(name ="User_Role",joinColumns = {@JoinColumn(name="User_Id")},
             inverseJoinColumns = {@JoinColumn(name = "Role_Id")})
     private Set<Role>  roleSet = new HashSet<>();

@@ -16,7 +16,7 @@ import java.util.Set;
         @UniqueConstraint(name = "Role_Name_Uk",columnNames = "Role_Name")})
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Role_Id")
     private Long id;
     @Column(name = "Role_Name")

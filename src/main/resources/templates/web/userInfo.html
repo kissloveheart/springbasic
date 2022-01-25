@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout::layout(~{::title},~{::main})}">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
 </head>
 <body>
-$END$
+<main>
+    <h2>User Info Page</h2>
+    <h3>Welcome : <span th:utext="${#request.userPrincipal.name}"></span></h3>
+    <br/>
+    <div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
+</main>
 </body>
 </html>

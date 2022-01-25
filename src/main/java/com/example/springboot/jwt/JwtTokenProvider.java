@@ -1,24 +1,28 @@
-package com.example.springboot.config;
+package com.example.springboot.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Date;
+import java.util.function.Function;
 
 @Slf4j
 @Component
 public class JwtTokenProvider {
     // Đoạn JWT_SECRET này là bí mật, chỉ có phía server biết
     private final String JWT_SECRET = "1111111111";
-    //Thời gian có hiệu lực của chuỗi jwt
-    private final long JWT_EXPIRATION = 604800000L;
 
     // Tạo ra jwt từ thông tin user
     public String generateToken(UserDetails userDetails){
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
+        Date now = new Date(System.currentTimeMillis());
+        //Thời gian có hiệu lực của chuỗi jwt
+        //milis
+        long expiration = 60*1000L;
+        Date expiryDate = new Date(System.currentTimeMillis()+ expiration);
         // Tạo chuỗi json web token từ email của user.
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
@@ -27,27 +31,41 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
-    // Lấy thông tin user từ jwt
-    public String getUserEmailFromJWT(String token){
-        Claims claims =Jwts.parser().setSigningKey(JWT_SECRET)
+    // Lấy thông tin claims từ token
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = Jwts.parser()
+                .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+        return claimsResolver.apply(claims);
     }
 
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
-            return true;
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
-        }
-        return false;
+    // Lấy  user email từ jwt
+    public String getUserEmailFromToken(String token){
+        return getClaimFromToken(token,Claims::getSubject);
+    }
+    // Lấy ngày hết hạn
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    public boolean validateToken(String authToken, UserDetails userDetails) {
+        final String username = getUserEmailFromToken(authToken);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(authToken));
+    }
+
+    @PostConstruct
+    public void postConstruct(){
+        log.info("Initial jwt bean");
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        log.info("Destroy jwt bean");
     }
 }

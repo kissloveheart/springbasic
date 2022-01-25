@@ -2,12 +2,11 @@ package com.example.springboot.bootstrap;
 
 
 
-import com.example.springboot.Service.RoleService;
-import com.example.springboot.Service.UserAppService;
+import com.example.springboot.service.RoleService;
+import com.example.springboot.service.UserAppService;
 import com.example.springboot.model.Role;
 import com.example.springboot.model.UserApp;
 import com.example.springboot.repository.UserAppRepository;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

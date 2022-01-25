@@ -1,19 +1,17 @@
-package com.example.springboot.Service;
+package com.example.springboot.service;
 
 import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.converter.UserAppToUserAppCommand;
 import com.example.springboot.model.UserApp;
 import com.example.springboot.repository.UserAppRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.Objects;

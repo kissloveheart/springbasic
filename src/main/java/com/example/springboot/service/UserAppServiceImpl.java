@@ -1,4 +1,4 @@
-package com.example.springboot.Service;
+package com.example.springboot.service;
 
 import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.converter.UserAppCommandToUserApp;
@@ -38,7 +38,7 @@ public class UserAppServiceImpl implements UserAppService{
     public UserApp findById(Long Id) {
         Optional<UserApp> userAppOptional = userAppRepository.findById(Id);
         if(!userAppOptional.isPresent()){
-            //throw new RuntimeException("UserApp is not found");
+            log.warn("UserApp is not found");
             return null;
         }
         return userAppOptional.get();
@@ -48,7 +48,8 @@ public class UserAppServiceImpl implements UserAppService{
     public UserApp findByEmail(String email) {
         Optional<UserApp> userAppOptional = userAppRepository.findByEmail(email);
         if(!userAppOptional.isPresent()){
-            throw new RuntimeException("UserApp is not found");
+            log.warn("UserApp is not found");
+            return null;
         }
         return userAppOptional.get();
     }

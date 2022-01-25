@@ -1,40 +1,52 @@
 package com.example.springboot.repository;
 
-import com.example.springboot.service.UserAppService;
+import com.example.springboot.model.Role;
 import com.example.springboot.model.UserApp;
+import com.example.springboot.service.UserAppService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.Optional;
 
-@SpringBootTest
-//@Sql("/createUser.sql")
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+@DataJpaTest
+@Sql("/createUser.sql")
 @Slf4j
-class RoleRepositoryTest {
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private EntityManager entityManager;
+class RoleRepositoryTestJpa {
 
-    @Autowired private RoleRepository roleRepository;
+    private static final String PASSWORD ="$2a$10$f7QCa1euQIci96KeGFZ.meDqNC53EFoeK0ic0T94AE/SJIhB2kKxy" ;
+
     @Autowired private UserAppRepository userAppRepository;
+    @Autowired private RoleRepository roleRepository;
 
-    @Autowired private UserAppService userAppService;
+    private Role roleMod;
+    private UserApp userApp3;
 
-    @Test
-    void testAllNotNull(){
-        Assertions.assertNotNull(dataSource);
-        Assertions.assertNotNull(jdbcTemplate);
-        Assertions.assertNotNull(entityManager);
+    @BeforeEach
+    public void setUp(){
+        roleMod = new Role();
+        roleMod.setRoleName("Mod");
+
+        userApp3 = new UserApp();
+        userApp3.setEmail("mod@mod.com");
+        userApp3.setEncryptedPassword(PASSWORD);
+        userApp3.setEnabled(true);
+        userApp3.addRole(roleMod);
     }
 
     @Test
@@ -46,18 +58,14 @@ class RoleRepositoryTest {
         Assertions.assertEquals("admin@admin.com", userApp.get().getEmail());
         Assertions.assertEquals(2,userApp.get().getRoleSet().size());
     }
-
     @Test
-    @Transactional
-    void findByEmailService(){
-        UserApp userApp = userAppService.findByEmail("user@user.com");
-        //show the role of user
-        if (userApp.getRoleSet() != null && userApp.getRoleSet().size() != 0) {
-            userApp.getRoleSet().forEach(role -> log.info(role.getRoleName()));
-        } else{
-            log.info("Can not load role list from service layer");
-        }
-        Assertions.assertEquals("user@user.com",userApp.getEmail());
+    void saveUserApp(){
+        userApp3 = userAppRepository.save(userApp3);
+        Assertions.assertEquals("Mod",roleRepository.findByRoleName("Mod").get().getRoleName());
+        roleRepository.findAll().forEach(role -> log.info(role.getRoleName()) );
+        log.info("Role after delete");
+        userAppRepository.deleteById(userApp3.getId());
+        roleRepository.findAll().forEach(role -> log.info(role.getRoleName()) );
     }
 
 

@@ -1,24 +1,59 @@
 package com.example.springboot.controller;
 
-import com.example.springboot.Service.UserAppService;
+import com.example.springboot.jwt.JwtRequest;
+import com.example.springboot.jwt.JwtTokenProvider;
+import com.example.springboot.service.UserAppService;
 import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.model.UserApp;
+import com.example.springboot.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api")
 public class ApiController {
     private final UserAppService userAppService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
 
     public ApiController(UserAppService userAppService) {
         this.userAppService = userAppService;
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> jwtLogin(@RequestBody JwtRequest authenticationRequest) throws Exception{
+        authenticate(authenticationRequest.getEmail(),authenticationRequest.getPassword());
+        final UserDetails userDetails =
+                userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+        final String token = jwtTokenProvider.generateToken(userDetails);
+        return ResponseEntity.ok(token);
+
+    }
+
+    private void authenticate(String email, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
+    }
 
     @GetMapping("/get/{email:^[A-Za-z0-9+_.-]+@.+$}")
     public ResponseEntity<UserAppCommand> getUser(@PathVariable String email){

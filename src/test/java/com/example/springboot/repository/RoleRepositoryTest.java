@@ -1,17 +1,13 @@
 package com.example.springboot.repository;
 
-import com.example.springboot.Service.UserAppService;
-import com.example.springboot.Service.UserAppServiceImpl;
+import com.example.springboot.service.UserAppService;
 import com.example.springboot.model.UserApp;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -42,6 +38,7 @@ class RoleRepositoryTest {
     }
 
     @Test
+    @Transactional
     void findByEmailRepo() {
         Optional<UserApp> userApp = userAppRepository.findByEmail("admin@admin.com");
         if (userApp.isPresent()) {

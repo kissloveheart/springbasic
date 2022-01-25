@@ -1,6 +1,6 @@
 package com.example.springboot.converter;
 
-import com.example.springboot.Service.RoleService;
+import com.example.springboot.service.RoleService;
 import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.model.UserApp;
 import lombok.Synchronized;

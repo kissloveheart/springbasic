@@ -1,9 +1,8 @@
-package com.example.springboot.Service;
+package com.example.springboot.service;
 
 import com.example.springboot.model.Role;
 import com.example.springboot.model.UserApp;
 import com.example.springboot.repository.RoleRepository;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

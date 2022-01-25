@@ -1,13 +1,12 @@
-package com.example.springboot.config;
+package com.example.springboot.jwt;
 
 import com.example.springboot.service.UserDetailsServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,25 +28,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        try {
             // Lấy jwt từ request
-            String jwt = getJwtFromRequest(request);
-            if(StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)){
+            String jwtToken = getJwtFromRequest(request);
+            String email =null;
+            if(StringUtils.hasText(jwtToken)){
                 // Lấy email từ token
-                String email = jwtTokenProvider.getUserEmailFromJWT(jwt);
-                // Lấy thông tin UserDetail từ token
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                if( userDetails != null){
-                    // Nếu người dùng hợp lệ, set thông tin cho Seturity Context
-                    UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                try {
+                    email = jwtTokenProvider.getUserEmailFromToken(jwtToken);
+                } catch (IllegalArgumentException e) {
+                    log.info("Unable to get JWT Token");
+                } catch (ExpiredJwtException e){
+                    log.info("JWT Token has expired");
                 }
             }
-        } catch (Exception e) {
-            log.error("failed on set user authentication", e);
-        }
+
+            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails= userDetailsService.loadUserByUsername(email);
+                if(jwtTokenProvider.validateToken(jwtToken,userDetails)){
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+            }
         filterChain.doFilter(request, response);
     }
 
