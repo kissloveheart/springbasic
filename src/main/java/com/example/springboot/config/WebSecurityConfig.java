@@ -61,7 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 
         // Các trang không yêu cầu login
-        http.authorizeRequests().antMatchers("/","/h2","/index","/login","/logout","/api/login").permitAll();
+        http.authorizeRequests().antMatchers("/","/h2","/index","/login","/logout","/api/login",
+                "/regis").permitAll();
 
         // Trang /userInfo yêu cầu phải login với vai trò ROLE_USER hoặc ROLE_ADMIN.
         // Nếu chưa login, nó sẽ redirect tới trang /login.
@@ -91,8 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
 
         // Cấu hình Remember Me.
-        /*http.authorizeRequests().and().rememberMe().tokenRepository(this.persistentTokenRepository())
-                .tokenValiditySeconds(10);*/ // 10s
+        http.authorizeRequests().and().rememberMe().tokenRepository(this.persistentTokenRepository())
+                .tokenValiditySeconds(24*60*60); // 24h
         // Thêm một lớp Filter UsernamePassword filter kiểm tra jwt
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

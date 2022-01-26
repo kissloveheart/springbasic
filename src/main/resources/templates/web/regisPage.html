@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout::layout(~{::title},~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Account</title>
+</head>
+<body>
+<main>
+    <h1 class="m-3">Registration</h1>
+
+        <form method="post" action="regis" th:object="${userApp}" class="row g-2"
+              th:classappend="${#fields.hasAnyErrors()}? 'was-validated'" novalidate >
+            <div class="col-md-4">
+                <label for="inputEmail3" class="form-label">Email</label>
+                <input type="email" class="form-control" id="inputEmail3" th:field="*{email}" required>
+                <div class="invalid-feedback">
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-4">
+                <label for="inputPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="inputPassword" th:field="*{password}" required>
+                <div class="invalid-feedback">
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                </div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-4">
+                <label for="inputPassword1" class="form-label">RePassword</label>
+                <input type="password" class="form-control" id="inputPassword1" th:field="*{rePassword}" required>
+                <div class="invalid-feedback">
+                    <span th:if="${#fields.hasErrors('rePassword')}" th:errors="*{rePassword}"></span>
+                </div>
+            </div>
+            <div class="w-100"></div>
+            <button type="submit" class="btn btn-primary col-auto">Registration</button>
+        </form>
+    <script>
+        $(document).ready(function () {
+            $("#inputEmail3").val("");
+        })
+    </script>
+
+</main>
+</body>
+
+</html>
