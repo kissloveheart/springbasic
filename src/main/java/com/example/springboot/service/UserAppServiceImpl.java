@@ -4,6 +4,8 @@ import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.converter.UserAppCommandToUserApp;
 import com.example.springboot.converter.UserAppToUserAppCommand;
 import com.example.springboot.model.UserApp;
+import com.example.springboot.model.VerificationToken;
+import com.example.springboot.repository.TokenRepository;
 import com.example.springboot.repository.UserAppRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,13 @@ public class UserAppServiceImpl implements UserAppService{
     private final UserAppRepository userAppRepository;
     private final UserAppToUserAppCommand userAppToUserAppCommand;
     private final UserAppCommandToUserApp userAppCommandToUserApp;
+    private final TokenRepository tokenRepository;
 
-    public UserAppServiceImpl(UserAppRepository userAppRepository, UserAppToUserAppCommand userAppToUserAppCommand, UserAppCommandToUserApp userAppCommandToUserApp) {
+    public UserAppServiceImpl(UserAppRepository userAppRepository, UserAppToUserAppCommand userAppToUserAppCommand, UserAppCommandToUserApp userAppCommandToUserApp, TokenRepository tokenRepository) {
         this.userAppRepository = userAppRepository;
         this.userAppToUserAppCommand = userAppToUserAppCommand;
         this.userAppCommandToUserApp = userAppCommandToUserApp;
+        this.tokenRepository = tokenRepository;
     }
 
 
@@ -52,6 +56,12 @@ public class UserAppServiceImpl implements UserAppService{
             return null;
         }
         return userAppOptional.get();
+    }
+
+    @Override
+    public void save(UserApp userApp) {
+        userAppRepository.save(userApp);
+        log.info("Save successfully: "+userApp.getEmail());
     }
 
     @Override
@@ -88,5 +98,16 @@ public class UserAppServiceImpl implements UserAppService{
         }
         userAppRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public void createVerificationToken(UserApp userApp, String token) {
+        VerificationToken myToken = new VerificationToken(token, userApp);
+        tokenRepository.save(myToken);
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(String verificationToken) {
+        return tokenRepository.findByToken(verificationToken);
     }
 }

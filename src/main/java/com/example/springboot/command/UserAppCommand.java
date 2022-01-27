@@ -18,7 +18,7 @@ public class UserAppCommand {
     private String password;
     private String rePassword;
     private Date createDate = new Date();
-    private boolean enabled = false;
+    private boolean enabled;
     private Set<String> roleNameSet = new HashSet<>(Arrays.asList("USER"));
 
 }

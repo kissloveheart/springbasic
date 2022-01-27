@@ -12,14 +12,12 @@
         <div class="col-md-6 col-lg-4">
             <h1>Login</h1>
             <!-- /login?error=true -->
-            <div class="alert alert-danger" th:if="${#request.getParameter('error') == 'true'}">
+            <div class="alert alert-danger" th:if="${#request.getParameter('error') eq 'true'}">
                 Login Failed!!!<br/>
                 Reason :
-                <span th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
-                      th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
-                Static summary
-                 </span>
+                <p th:utext="${session[SPRING_SECURITY_LAST_EXCEPTION]}"></p>
             </div>
+            <div class="alert alert-success" th:if="${message}" th:text="${message}? ${message}"></div>
             <form method="post" action="/j_spring_security_check">
                 <div class="row mb-3">
                     <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>

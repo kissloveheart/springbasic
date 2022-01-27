@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -20,6 +21,8 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     private final DataSource dataSource;
     private final UserDetailsServiceImpl userDetailsService;
@@ -62,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Các trang không yêu cầu login
         http.authorizeRequests().antMatchers("/","/h2","/index","/login","/logout","/api/login",
-                "/regis").permitAll();
+                "/regis/**","/error","/schedule/**").permitAll();
 
         // Trang /userInfo yêu cầu phải login với vai trò ROLE_USER hoặc ROLE_ADMIN.
         // Nếu chưa login, nó sẽ redirect tới trang /login.
@@ -88,6 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=true")//
                 .usernameParameter("email")//
                 .passwordParameter("password")
+                .failureHandler(authenticationFailureHandler)
                 // Cấu hình cho Logout Page.
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
 

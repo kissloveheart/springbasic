@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout::layout(~{::title},~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<main class="container">
+    <div class="row">
+        <h1>Schedule jobs</h1>
+        <div class="col-md-4">
+            <div class="alert alert-success" th:if="${message}" th:text="${message}? ${message}"></div>
+            <form method="post" action="/schedule/create" th:object="${taskDefinition}" class="row g-2">
+                <div class="col-auto">
+                    <label for="inputEmail3" class="form-label">Cron Expression</label>
+                    <input type="text" class="form-control" id="inputEmail3"
+                           placeholder="* 1 * * * *" th:field="*{cronExpression}" required>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-auto">
+                    <label for="inputPassword" class="form-label">Action type</label>
+                    <input type="text" class="form-control" id="inputPassword" th:field="*{actionType}" required>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-auto">
+                    <label for="inputPassword1" class="form-label">Data</label>
+                    <input type="text" class="form-control" id="inputPassword1" th:field="*{data}" required>
+                </div>
+                <div class="w-100"></div>
+                <button type="submit" class="btn btn-primary col-auto">Create</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Job ID</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="job,state : ${jobs}">
+                    <td th:text="${state.count}">1</td>
+                    <td th:text="${job.key}">.....</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <form action="/schedule/remove">
+                <select class="form-select" name="id">
+                    <option selected>Select id to remove</option>
+                    <option  th:each="entry : ${jobs}"
+                             th:value="${entry.key}"
+                             th:utext="${entry.key}">One</option>
+                </select>
+                <button type="submit" class="btn btn-danger mt-3">Remove</button>
+            </form>
+        </div>
+    </div>
+    <div class="row pt-5">
+        <h2 class="text-success">Console log</h2>
+        <div class="col-auto bg-light" id="list">
+
+        </div>
+    </div>
+<script>
+    const list= document.querySelector("#list");
+    window.addEventListener('load', function () {
+        // Your document is loaded.
+        let fetchInterval = 5000; // 5 seconds.
+
+        // Invoke the request every 5 seconds.
+        setInterval(fetchJob, fetchInterval);
+    });
+
+    function fetchJob() {
+        fetch('http://localhost:8080/schedule/list')
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Can not read data from server");
+                }
+            })
+            .then(function (data) {
+                list.innerHTML="";
+                data.forEach(consoleLog =>{
+                    list.insertAdjacentHTML( "beforeend",
+                    `<p>${consoleLog}</p>`
+                    )
+                })
+
+            })
+            .catch(function (err) {
+                console.log('error: ' + err);
+            });
+    }
+</script>
+</main>
+</body>
+</html>

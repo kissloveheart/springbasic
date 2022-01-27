@@ -23,6 +23,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserAppService userAppService;
+    boolean enabled = true;
+    boolean accountNonExpired = true;
+    boolean credentialsNonExpired = true;
+    boolean accountNonLocked = true;
 
     @Override
     @Transactional
@@ -37,7 +41,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                                 map(Role::getRoleName).collect(Collectors.toSet());
         List<GrantedAuthority> grantList = new ArrayList<>();
         listRoleName.iterator().forEachRemaining(roleName -> grantList.add(new SimpleGrantedAuthority(roleName)));
-        return new User(userApp.getEmail(),userApp.getEncryptedPassword(),grantList);
-
+        return new User(userApp.getEmail(),
+                        userApp.getEncryptedPassword(),
+                        userApp.isEnabled(),
+                        accountNonExpired,
+                        credentialsNonExpired,
+                        accountNonLocked,grantList);
     }
 }
