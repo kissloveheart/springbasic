@@ -25,6 +25,9 @@ public class UserAppToUserAppCommand implements Converter<UserApp, UserAppComman
         command.setPassword(null);
         command.setCreateDate(source.getCreateDate());
         command.setEnabled(source.isEnabled());
+        command.setCash(source.getCash());
+        command.setAddress(source.getAddress());
+        command.setPhoneNumber(source.getPhoneNumber());
 
         if (source.getRoleSet()!= null && source.getRoleSet().size() > 0) {
             source.getRoleSet().

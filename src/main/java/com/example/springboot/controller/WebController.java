@@ -4,8 +4,12 @@ import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.listener.OnRegistrationCompleteEvent;
 import com.example.springboot.model.UserApp;
 import com.example.springboot.model.VerificationToken;
+import com.example.springboot.service.OrdersService;
+import com.example.springboot.service.ProductService;
 import com.example.springboot.service.UserAppService;
+import com.example.springboot.session.CartInfo;
 import com.example.springboot.utils.SecurityUtils;
+import com.example.springboot.utils.SessionUtil;
 import com.example.springboot.utils.UserUtils;
 import com.example.springboot.validator.UserAppCommandValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +39,10 @@ public class WebController {
     private SecurityUtils securityUtils;
     @Autowired
     private UserAppCommandValidator userAppCommandValidator;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private OrdersService ordersService;
 
     @InitBinder("userApp")
     public void customizeBinding(WebDataBinder binder) {
@@ -48,8 +56,11 @@ public class WebController {
     }
 
     @GetMapping({"/", "/index"})
-    public String index(Model model) {
+    public String index(Model model, HttpServletRequest request) {
         model.addAttribute("text", " guys!");
+        model.addAttribute("products",productService.findAllProducts());
+        CartInfo myCart = SessionUtil.getCartInSession(request);
+        model.addAttribute("cartForm", myCart);
         return "/web/index";
     }
 
@@ -111,6 +122,8 @@ public class WebController {
         User loginUser = (User) ((Authentication) principal).getPrincipal();
         String userInfo = UserUtils.userToString(loginUser);
         model.addAttribute("userInfo", userInfo);
+
+        model.addAttribute("orders", ordersService.getOrderListByUser());
         return "/web/userInfo";
     }
 

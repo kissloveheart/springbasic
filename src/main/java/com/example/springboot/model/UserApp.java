@@ -4,9 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -33,6 +31,10 @@ public class UserApp {
     @JoinTable(name ="User_Role",joinColumns = {@JoinColumn(name="User_Id")},
             inverseJoinColumns = {@JoinColumn(name = "Role_Id")})
     private Set<Role>  roleSet = new HashSet<>();
+
+    private String phoneNumber;
+    private String address;
+    private Double cash;
 
     public void addRole(Role role){
         role.getUserAppSet().add(this);

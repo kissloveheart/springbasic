@@ -5,8 +5,45 @@
     <title>Home</title>
 </head>
 <body>
-<main>
+<main class="container-fluid">
     <h1>Hello <span th:text="${#request.userPrincipal != null}? ${#request.userPrincipal.getName()} :${text}"></span> </h1>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-8 d-flex flex-wrap" >
+            <button type="button" class="btn btn-primary col-12 mb-3">Products</button>
+            <div class="card" style="width: 15rem;" th:each="product : ${products}">
+                <img th:src="@{/image/download.png}" class="card-img-top" th:alt="${product.name}">
+                <div class="card-body">
+                    <h5 class="card-title text-danger" th:text="${product.price}+ ' $'">Card title</h5>
+                    <p class="card-text" th:text="${product.name}"></p>
+                    <a th:href="@{'/addCart/'+${product.id}}" class="btn btn-primary">Add to cart</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary col-12 mb-3">My Cart</button>
+            <div  th:if="${#lists.isEmpty(cartForm.cartLines)}"class="alert-light">
+                <p>Chưa có món nào!</p>
+            </div>
+            <table th:if="${not #lists.isEmpty(cartForm.cartLines)}" class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cartLine,state : ${cartForm.cartLines}">
+                    <td th:text="${cartLine.productInfo.name}">1</td>
+                    <td th:text="${cartLine.quantity}">.....</td>
+                    <td> <a th:href="@{'/removeCart/'+${cartLine.productInfo.id}}" class="btn btn-primary">Remove</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <a th:href="@{/orderConfirm}"  th:if="${not #lists.isEmpty(cartForm.cartLines)}" class="btn btn-primary">Buy now</a>
+        </div>
+    </div>
 </main>
 </body>
 </html>

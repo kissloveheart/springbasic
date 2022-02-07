@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout::layout(~{::title},~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+</head>
+<body>
+<main class="container">
+    <div class="row">
+        <div class="col-md-8"><h2>Order info</h2>
+            <h3>Your info</h3>
+            <ul>
+                <li>Email: <span th:text="${userInfo.email}"></span></li>
+                <li>Phone number: <span th:text="${userInfo.phoneNumber}"></span></li>
+                <li>Address: <span th:text="${userInfo.address}"></span></li>
+                <li>Cash: <span th:text="${userInfo.cash} +' $'"></span></li>
+            </ul>
+            <h3>Order details</h3>
+            <table th:if="${not #lists.isEmpty(cartForm.cartLines)}" class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cartLine,state : ${cartForm.cartLines}">
+                    <td th:text="${state.count}">1</td>
+                    <td th:text="${cartLine.productInfo.name}">1</td>
+                    <td class="fw-bold">
+                        <a class="" th:href="@{'/decreaseQuantity/'+${cartLine.productInfo.id}}">-</a>
+                        <span th:text="${cartLine.quantity}"></span>
+                        <a class="" th:href="@{'/increaseQuantity/'+${cartLine.productInfo.id}}">+</a>
+                    </td>
+                    <td th:text="${cartLine.productInfo.price}">....</td>
+                    <td th:text="${cartLine.productInfo.price*cartLine.quantity}">....</td>
+                    <td> <a th:href="@{'/removeCart/'+${cartLine.productInfo.id}}" class="btn btn-primary">Remove</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-danger fw-bold text-end"><h4>Subtotal: <span th:text="${cartForm.amountTotal}+ ' $'"></span></h4></div>
+            <a th:href="@{/saveOrder}" class="btn btn-primary">Confirm order!</a>
+
+        </div>
+    </div>
+</main>
+</body>
+</html>

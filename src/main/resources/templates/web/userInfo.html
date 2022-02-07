@@ -5,11 +5,29 @@
     <title>Trang chủ</title>
 </head>
 <body>
-<main>
+<main class="container">
     <h2>User Info Page</h2>
     <h3>Welcome : <span th:utext="${#request.userPrincipal.name}"></span></h3>
     <br/>
     <div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
+    <hr>
+    <h3>List orders</h3>
+    <table th:if="${not #lists.isEmpty(orders)}" class="table">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order date</th>
+            <th>Total amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order,state : ${orders}">
+            <td th:text="${order.id}">1</td>
+            <td th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">2</td>
+            <td th:text="${order.totalAmount} + ' $'">3</td>
+        </tr>
+        </tbody>
+    </table>
 </main>
 </body>
 </html>

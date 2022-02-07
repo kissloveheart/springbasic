@@ -20,5 +20,9 @@ public class UserAppCommand {
     private Date createDate = new Date();
     private boolean enabled;
     private Set<String> roleNameSet = new HashSet<>(Arrays.asList("USER"));
+    private String phoneNumber;
+    private String address;
+    private Double cash = 0D;
+
 
 }

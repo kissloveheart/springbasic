@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout::layout(~{::title},~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+</head>
+<body>
+<main class="container">
+    <h4 th:if="${OrderId}" class="alert alert-success">Your order ID is <span th:text="${OrderId}"></span></h4>
+    <h4 th:if="${Fail}" class="alert alert-danger">Your order is fail!!!
+        <p th:text="${Fail}">...</p></h4>
+</main>
+</body>
+</html>
