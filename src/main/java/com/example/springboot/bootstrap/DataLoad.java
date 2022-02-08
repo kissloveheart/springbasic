@@ -63,10 +63,10 @@ public class DataLoad implements ApplicationListener<ContextRefreshedEvent> {
             log.info(String.valueOf(productInfo.getPrice()));
             log.info(productInfo.getCategory().getName());
         });
+        */
         log.info(productRepository.findById(1L, ProductInfoDTO.class).toString());
-        log.info(productRepository.findById(1L, ProductInfo.class).toString());*/
-
-
+        ProductInfo productInfo = productRepository.findById(1L, ProductInfo.class);
+        log.info(productInfo.getCategory().getName());
     }
 
     public List<Role> getRoleList(){
