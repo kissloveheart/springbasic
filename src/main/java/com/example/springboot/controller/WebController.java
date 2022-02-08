@@ -94,6 +94,7 @@ public class WebController {
 
     @GetMapping("/regis/confirm/{token:[A-Za-z0-9-]{36}}")
     public String confirmRegis(Model model, @PathVariable String token, HttpServletRequest request) {
+       // Verify token
         VerificationToken verificationToken = userAppService.getVerificationToken(token);
 
         if (verificationToken == null) {
@@ -118,14 +119,22 @@ public class WebController {
     @GetMapping("/userInfo")
     public String userInfo(Model model, Principal principal) {
         String email = principal.getName();
-        log.info("The user " + email + " login successfully");
         User loginUser = (User) ((Authentication) principal).getPrincipal();
         String userInfo = UserUtils.userToString(loginUser);
         model.addAttribute("userInfo", userInfo);
-
         model.addAttribute("orders", ordersService.getOrderListByUser());
+
+        UserAppCommand command = userAppService.findCommandByEmail(email);
+        model.addAttribute("cash", command.getCash());
         return "/web/userInfo";
     }
+
+    @PostMapping("/userInfo")
+    public String updateCash(@RequestParam String money){
+        userAppService.depositCash(Double.parseDouble(money));
+        return "redirect:/userInfo";
+    }
+
 
     @GetMapping("/logoutSuccessful")
     public String logoutSuccessfulPage(Model model) {

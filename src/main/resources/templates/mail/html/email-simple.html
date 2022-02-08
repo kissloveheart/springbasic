@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<p style="color: red; font-weight: bold" th:text="'Dear ' + ${name} + ','"></p>
+<p style="color: red; font-weight: bold" th:text="#{greeting(${name})}"></p>
 <br>
-<p>You registered successfully. To confirm your registration, please click on the below link.</p>
+<p th:text="#{regis}">You registered successfully. To confirm your registration, please click on the below link:</p>
 <a th:href="${link}" target="_blank" th:utext="${link}"></a>
 <br>
 <p>Thanks!</p>

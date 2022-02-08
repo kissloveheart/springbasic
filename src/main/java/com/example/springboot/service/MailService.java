@@ -39,28 +39,28 @@ public class MailService {
      * Send HTML mail (simple)
      */
     public void sendRegisMail(
-            final String recipientName,final String linkToken, final String recipientEmail, final Locale locale)
+            String recipientName, String linkToken, String recipientEmail, Locale locale)
             throws MessagingException {
 
         // Prepare the evaluation context
-        final Context ctx = new Context(locale);
+        Context ctx = new Context(locale);
         ctx.setVariable("name", recipientName);
         ctx.setVariable("link", linkToken);
 
         // Prepare message using a Spring helper
-        final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
         message.setSubject("Registration Confirmation");
         message.setFrom(env.getProperty("support.email"));
         message.setTo(recipientEmail);
 
         // Create the HTML body using Thymeleaf
-        final String htmlContent = this.htmlTemplateEngine.process(EMAIL_REGIS_TEMPLATE_NAME, ctx);
+        String htmlContent = htmlTemplateEngine.process(EMAIL_REGIS_TEMPLATE_NAME, ctx);
         message.setText(htmlContent, true /* isHtml */);
 
         // Send email
-        this.mailSender.send(mimeMessage);
-        log.info("Email sent successfully to: "+recipientEmail);
+        mailSender.send(mimeMessage);
+        log.info("Email sent successfully to: " + recipientEmail);
     }
 
     /*

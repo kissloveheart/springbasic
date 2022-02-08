@@ -2,6 +2,7 @@ package com.example.springboot.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -34,7 +35,7 @@ public class MailConfig {
 
         final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-        // Basic mail sender configuration, based on emailconfig.properties
+        // Basic mail sender configuration, based on application.properties
         mailSender.setHost(env.getProperty("spring.mail.host"));
         mailSender.setPort(Integer.parseInt(env.getProperty("spring.mail.port")));
         mailSender.setProtocol(env.getProperty("spring.mail.protocol"));
@@ -50,9 +51,11 @@ public class MailConfig {
     }
 
     @Bean
-    public ResourceBundleMessageSource emailMessageSource() {
-        final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("/MailMessages");
+    public MessageSource emailMessageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("mail/messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setCacheSeconds(0);
         return messageSource;
     }
 
@@ -78,7 +81,7 @@ public class MailConfig {
 
     private ITemplateResolver textTemplateResolver() {
         final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setOrder(Integer.valueOf(1));
+        templateResolver.setOrder(1);
         templateResolver.setResolvablePatterns(Collections.singleton("text/*"));
         templateResolver.setPrefix("/templates/mail/");
         templateResolver.setSuffix(".txt");
@@ -90,7 +93,7 @@ public class MailConfig {
 
     private ITemplateResolver htmlTemplateResolver() {
         final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setOrder(Integer.valueOf(2));
+        templateResolver.setOrder(2);
         templateResolver.setResolvablePatterns(Collections.singleton("html/*"));
         templateResolver.setPrefix("/templates/mail/");
         templateResolver.setSuffix(".html");
@@ -102,7 +105,7 @@ public class MailConfig {
 
     private ITemplateResolver stringTemplateResolver() {
         final StringTemplateResolver templateResolver = new StringTemplateResolver();
-        templateResolver.setOrder(Integer.valueOf(3));
+        templateResolver.setOrder(3);
         // No resolvable pattern, will simply process as a String template everything not previously matched
         templateResolver.setTemplateMode("HTML5");
         templateResolver.setCacheable(false);

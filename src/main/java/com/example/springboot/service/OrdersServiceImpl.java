@@ -11,6 +11,7 @@ import com.example.springboot.repository.ProductRepository;
 import com.example.springboot.repository.UserAppRepository;
 import com.example.springboot.session.CartInfo;
 import com.example.springboot.session.CartLineInfo;
+import com.example.springboot.utils.SecurityUtils;
 import com.example.springboot.utils.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,15 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    UserAppService userAppService;
+
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY )
     public Orders saveOrder(CartInfo cartInfo) throws OrderTransactionException{
 
-        UserApp userApp = getCurrentUserApp();
+        UserApp userApp = userAppService.getCurrentUserApp();
         if (userApp == null){
             throw new OrderTransactionException("User not login");
         }
@@ -94,21 +98,9 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public List<OrderInfoDTO> getOrderListByUser() {
-        UserApp userApp = getCurrentUserApp();
+        UserApp userApp = userAppService.getCurrentUserApp();
         return  new ArrayList<>(ordersRepository.findByUserApp(OrderInfoDTO.class, userApp));
     }
 
-    private UserApp getCurrentUserApp(){
-        // Get user order
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
 
-        if(principal instanceof UserDetails) {
-            email =((UserDetails) principal).getUsername();
-        } else{
-            log.info("User not login");
-            return null;
-        }
-        return  userAppRepository.findByEmail(email).orElseGet(null);
-    }
 }

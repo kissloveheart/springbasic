@@ -22,5 +22,8 @@ public interface UserAppService {
     void createVerificationToken(UserApp userApp, String token);
 
     VerificationToken getVerificationToken(String VerificationToken);
+    void depositCash(Double money);
+
+    public UserApp getCurrentUserApp();
 
 }

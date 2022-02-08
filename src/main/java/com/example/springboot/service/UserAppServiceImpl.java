@@ -8,10 +8,13 @@ import com.example.springboot.model.VerificationToken;
 import com.example.springboot.repository.TokenRepository;
 import com.example.springboot.repository.UserAppRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -41,7 +44,7 @@ public class UserAppServiceImpl implements UserAppService{
     @Override
     public UserApp findById(Long Id) {
         Optional<UserApp> userAppOptional = userAppRepository.findById(Id);
-        if(!userAppOptional.isPresent()){
+        if(userAppOptional.isEmpty()){
             log.warn("UserApp is not found");
             return null;
         }
@@ -51,7 +54,7 @@ public class UserAppServiceImpl implements UserAppService{
     @Override
     public UserApp findByEmail(String email) {
         Optional<UserApp> userAppOptional = userAppRepository.findByEmail(email);
-        if(!userAppOptional.isPresent()){
+        if(userAppOptional.isEmpty()){
             log.warn("UserApp is not found");
             return null;
         }
@@ -93,7 +96,7 @@ public class UserAppServiceImpl implements UserAppService{
     @Override
     public Boolean deleteUser(Long id) {
         Optional<UserApp> userAppOptional = userAppRepository.findById(id);
-        if (!userAppOptional.isPresent()){
+        if (userAppOptional.isEmpty()){
             return false;
         }
         userAppRepository.deleteById(id);
@@ -110,4 +113,27 @@ public class UserAppServiceImpl implements UserAppService{
     public VerificationToken getVerificationToken(String verificationToken) {
         return tokenRepository.findByToken(verificationToken);
     }
+
+    @Override
+    public void depositCash(Double money) {
+        UserApp userApp = getCurrentUserApp();
+        double newCash = (userApp.getCash() + money) < 0? 0: userApp.getCash() + money;
+        userApp.setCash(newCash);
+        userAppRepository.save(userApp);
+    }
+
+    public UserApp getCurrentUserApp(){
+        // Get user order
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+
+        if(principal instanceof UserDetails) {
+            email =((UserDetails) principal).getUsername();
+        } else{
+            log.info("User not login");
+            return null;
+        }
+        return  userAppRepository.findByEmail(email).orElseGet(null);
+    }
+
 }

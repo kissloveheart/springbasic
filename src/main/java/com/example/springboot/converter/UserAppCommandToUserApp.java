@@ -25,7 +25,9 @@ public class UserAppCommandToUserApp implements Converter<UserAppCommand, UserAp
         final UserApp userApp = new UserApp();
         userApp.setId(source.getId());
         userApp.setEmail(source.getEmail());
-        userApp.setEncryptedPassword(passwordEncoder.encode(source.getPassword()));
+        if (source.getPassword() != null){
+            userApp.setEncryptedPassword(passwordEncoder.encode(source.getPassword()));
+        }
         userApp.setCreateDate(source.getCreateDate());
         userApp.setEnabled(source.isEnabled());
         userApp.setCash(source.getCash());
