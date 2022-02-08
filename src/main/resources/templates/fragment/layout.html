@@ -23,7 +23,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/index">Home</a>
+            <a class="navbar-brand" href="/index" th:text="#{home}">Home</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -37,10 +37,10 @@
                         <a class="nav-link" href="/admin" th:if="${#request.userPrincipal != null}">Admin</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login" th:if="${#request.userPrincipal == null}">Login</a>
+                        <a class="nav-link" href="/login" th:if="${#request.userPrincipal == null}" th:text="#{login}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/regis" th:if="${#request.userPrincipal == null}">Registration</a>
+                        <a class="nav-link" href="/regis" th:if="${#request.userPrincipal == null}" th:text="#{registration}">Registration</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout" th:if="${#request.userPrincipal != null}">Logout</a>
@@ -55,7 +55,20 @@
 <footer>
     <br>
     <hr/>
+    <select id="language" class="form-select col-auto" aria-label="select language" name="lang">
+        <option selected disabled>select language</option>
+        <option value="en">English</option>
+        <option value="vi">Vietnamese</option>
+    </select>
     <p>Copyright 2021</p>
+    <script type="text/javascript">
+        $('#language').change(function (e) {
+            let selectedOption = $(this).val();
+            if (selectedOption != ''){
+                window.location.replace('?lang=' + selectedOption);
+            }
+        })
+    </script>
 </footer>
 </body>
 </html>

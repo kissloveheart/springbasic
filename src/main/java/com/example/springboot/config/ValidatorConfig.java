@@ -11,7 +11,7 @@ public class ValidatorConfig {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         // Tải file: validation.properties
-        messageSource.setBasename("classpath:validation");
+        messageSource.setBasenames("classpath:validation","classpath:i18n/lang");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

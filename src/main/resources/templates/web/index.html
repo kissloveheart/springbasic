@@ -6,7 +6,7 @@
 </head>
 <body>
 <main class="container-fluid">
-    <h1>Hello <span th:text="${#request.userPrincipal != null}? ${#request.userPrincipal.getName()} :${text}"></span> </h1>
+    <h1>[[#{hello}]] <span th:text="${#request.userPrincipal != null}? ${#request.userPrincipal.getName()} :${text}"></span> </h1>
     <hr>
 
     <div class="row">
@@ -24,7 +24,7 @@
         <div class="col-md-4">
             <button type="button" class="btn btn-primary col-12 mb-3">My Cart</button>
             <div  th:if="${#lists.isEmpty(cartForm.cartLines)}"class="alert-light">
-                <p>Chưa có món nào!</p>
+                <p>No items in cart!</p>
             </div>
             <table th:if="${not #lists.isEmpty(cartForm.cartLines)}" class="table">
                 <thead>

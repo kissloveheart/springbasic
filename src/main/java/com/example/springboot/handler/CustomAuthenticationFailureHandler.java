@@ -29,7 +29,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         Locale locale = localeResolver.resolveLocale(request);
 
-        String errorMessage = "Invalid Credentials";
+        String errorMessage = "Invalid Credentials (Email or Password)";
 
         if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
             errorMessage = "Your account is disabled please check your mail and click on the confirmation link";
