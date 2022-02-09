@@ -30,6 +30,7 @@ public class UserApp {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinTable(name ="User_Role",joinColumns = {@JoinColumn(name="User_Id")},
             inverseJoinColumns = {@JoinColumn(name = "Role_Id")})
+    @ToString.Exclude
     private Set<Role>  roleSet = new HashSet<>();
 
     private String phoneNumber;
@@ -37,6 +38,7 @@ public class UserApp {
     private Double cash;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ToString.Exclude
     private VerificationToken verificationToken;
 
     public void addRole(Role role){

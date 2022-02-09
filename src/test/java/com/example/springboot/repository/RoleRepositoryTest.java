@@ -56,10 +56,22 @@ class RoleRepositoryTest {
         if (userApp.getRoleSet() != null && userApp.getRoleSet().size() != 0) {
             userApp.getRoleSet().forEach(role -> log.info(role.getRoleName()));
         } else{
-            log.info("Can not load role list from service layer");
+            log.info("Can not load role list");
         }
         Assertions.assertEquals("user@user.com",userApp.getEmail());
     }
-
-
+/*
+    UserTransaction userTransaction = entityManager.getTransaction();
+    try{
+        // begin a new transaction if expected
+        // (depending on the current transaction context and/or propagation mode setting)
+        userTransaction.begin();
+        registerNewAccount();
+        // the actual method invocation user
+        Transaction.commit();}
+    catch(RuntimeException e){
+        userTransaction.rollback();
+        // initiate rollback if business code fails
+        Throw e;}
+*/
 }

@@ -1,14 +1,14 @@
 INSERT INTO "PUBLIC"."ROLE" VALUES
-(2, 'ADMIN'),
-(3, 'USER');               
+                                (1, 'ADMIN'),
+                                (2, 'USER');
 
 INSERT INTO "PUBLIC"."USER_APP" VALUES
-(1, DATE '2022-01-20', 'admin@admin.com', TRUE, '$2a$10$f7QCa1euQIci96KeGFZ.meDqNC53EFoeK0ic0T94AE/SJIhB2kKxy'),
-(4, DATE '2022-01-20', 'user@user.com', TRUE, '$2a$10$f7QCa1euQIci96KeGFZ.meDqNC53EFoeK0ic0T94AE/SJIhB2kKxy');      
-               
+                                    (1, NULL, 5000.0, DATE '2022-02-09', 'admin@admin.com', TRUE, '$2a$10$f7QCa1euQIci96KeGFZ.meDqNC53EFoeK0ic0T94AE/SJIhB2kKxy', NULL, NULL),
+                                    (2, NULL, 5000.0, DATE '2022-02-09', 'user@user.com', TRUE, '$2a$10$f7QCa1euQIci96KeGFZ.meDqNC53EFoeK0ic0T94AE/SJIhB2kKxy', NULL, NULL);
+
 INSERT INTO "PUBLIC"."USER_ROLE" VALUES
-(1, 2),
-(1, 3),
-(4, 3);            
+                                     (1, 1),
+                                     (1, 2),
+                                     (2, 2);
             
              
