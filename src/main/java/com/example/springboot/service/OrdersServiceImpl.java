@@ -87,10 +87,17 @@ public class OrdersServiceImpl implements OrdersService {
 
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void tipMoneyForAdmin(){
+        UserApp admin = userAppRepository.findByEmail("admin@admin.com");
+        admin.setCash(admin.getCash()+100D);
+        userAppRepository.save(admin);
+    }
+
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW,
-            rollbackFor = OrderTransactionException.class)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = OrderTransactionException.class)
     public Long cashOrder(HttpServletRequest request) throws OrderTransactionException {
+        tipMoneyForAdmin();
         CartInfo cartInfo = SessionUtil.getCartInSession(request);
         Orders orders = saveOrder(cartInfo);
         return orders.getId();
@@ -101,6 +108,8 @@ public class OrdersServiceImpl implements OrdersService {
         UserApp userApp = userAppService.getCurrentUserApp();
         return  new ArrayList<>(ordersRepository.findByUserApp(OrderInfoDTO.class, userApp));
     }
+
+
 
 
 }

@@ -17,6 +17,7 @@ public class Product {
     private  String name;
     private Double price;
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "Category_Id")
     private Category category;
     private Byte[] image;
 

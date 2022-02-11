@@ -18,11 +18,12 @@ public class VerificationToken {
     private static final int EXPIRATION = 60 * 24;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Verification_Token_Id")
     private Long id;
 
     private String token;
     @OneToOne(targetEntity = UserApp.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false,name = "user_id", foreignKey = @ForeignKey(name = "FK_VERIFY_USER"))
+    @JoinColumn(nullable = false,name = "User_Id", foreignKey = @ForeignKey(name = "FK_VERIFY_USER"))
     private UserApp userApp;
     @Temporal(TemporalType.TIMESTAMP)
     private Date expiryDate;

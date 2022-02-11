@@ -18,8 +18,10 @@ import java.util.List;
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Orders_Id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "User_Id")
     private UserApp userApp;
     @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetailList = new ArrayList<>();

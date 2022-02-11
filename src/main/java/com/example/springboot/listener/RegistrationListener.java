@@ -24,7 +24,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
         UserApp userApp = userAppService.findByEmail(event.getUserAppCommand().getEmail());
         String token = UUID.randomUUID().toString();
-        userAppService.createVerificationToken(userApp,token);
+        userApp.setVerificationToken(userAppService.createVerificationToken(userApp,token));
         String name = userApp.getEmail().substring(0,userApp.getEmail().indexOf("@"));
         String confirmationUrl = event.getAppUrl() + "/confirm/" + token;
 

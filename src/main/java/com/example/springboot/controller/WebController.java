@@ -102,16 +102,13 @@ public class WebController {
             return "/web/error";
         }
 
-        UserApp userApp = verificationToken.getUserApp();
         Calendar cal = Calendar.getInstance();
 
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             model.addAttribute("message", "Your registration token has expired. Please register again.");
             return "/web/error";
         }
-
-        userApp.setEnabled(true);
-        userAppService.save(userApp);
+        userAppService.setEnableUserApp(verificationToken);
         model.addAttribute("message", "Active account successfully");
         return "/web/loginPage";
     }

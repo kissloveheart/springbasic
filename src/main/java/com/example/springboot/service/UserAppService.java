@@ -21,9 +21,10 @@ public interface UserAppService {
 
     Boolean deleteUser(Long id);
 
-    void createVerificationToken(UserApp userApp, String token);
+    VerificationToken createVerificationToken(UserApp userApp, String token);
 
     VerificationToken getVerificationToken(String VerificationToken);
+    void setEnableUserApp(VerificationToken verificationToken);
     void depositCash(Double money);
 
      UserApp getCurrentUserApp();

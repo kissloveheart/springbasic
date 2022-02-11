@@ -108,14 +108,22 @@ public class UserAppServiceImpl implements UserAppService{
     }
 
     @Override
-    public void createVerificationToken(UserApp userApp, String token) {
+    public VerificationToken createVerificationToken(UserApp userApp, String token) {
         VerificationToken myToken = new VerificationToken(token, userApp);
-        tokenRepository.save(myToken);
+        return tokenRepository.save(myToken);
     }
 
     @Override
     public VerificationToken getVerificationToken(String verificationToken) {
         return tokenRepository.findByToken(verificationToken);
+    }
+
+    @Override
+    public void setEnableUserApp(VerificationToken verificationToken) {
+        UserApp userApp = verificationToken.getUserApp();
+        userApp.setEnabled(true);
+        userApp.setVerificationToken(verificationToken);
+        userAppRepository.save(userApp);
     }
 
     @Override

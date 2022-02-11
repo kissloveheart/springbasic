@@ -48,13 +48,13 @@ public class DataLoad implements ApplicationListener<ContextRefreshedEvent> {
         //roleRepository.saveAll(getRoleList());
         userAppRepository.saveAll(getUserAppList());
        // log.info("save list user successfully");
-        userAppRepository.findByEmail("admin@admin.com").getRoleSet().forEach(role -> log.info(String.valueOf(role.getId())));
+/*        userAppRepository.findByEmail("admin@admin.com").getRoleSet().forEach(role -> log.info(String.valueOf(role.getId())));
         log.info("------------------------");
         userAppRepository.findByEmail("admin@admin.com").getRoleSet().forEach(role -> log.info(String.valueOf(role.getId())));
         log.info("--------- service  ------------");
         userAppService.findByEmail("admin@admin.com").getRoleSet().forEach(role -> log.info(String.valueOf(role.getId())));
         log.info("--------- service  ------------");
-        userAppService.findCommandByEmail("admin@admin.com").getRoleNameSet().forEach(role -> log.info(role));
+        userAppService.findCommandByEmail("admin@admin.com").getRoleNameSet().forEach(role -> log.info(role));*/
 
 
 

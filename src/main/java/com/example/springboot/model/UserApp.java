@@ -41,6 +41,10 @@ public class UserApp {
     @ToString.Exclude
     private VerificationToken verificationToken;
 
+    @OneToMany(mappedBy = "userApp",cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private Set<Orders> ordersSet = new HashSet<>();
+
     public void addRole(Role role){
         this.getRoleSet().add(role);
     }
