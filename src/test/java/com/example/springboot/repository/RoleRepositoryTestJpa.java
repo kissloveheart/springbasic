@@ -51,12 +51,12 @@ class RoleRepositoryTestJpa {
 
     @Test
     void findByEmailRepo() {
-        Optional<UserApp> userApp = userAppRepository.findByEmail("admin@admin.com");
-        if (userApp.isPresent()) {
-            userApp.get().getRoleSet().forEach(role -> log.info(role.getRoleName()));
+        UserApp userApp = userAppRepository.findByEmail("admin@admin.com");
+        if (userApp != null) {
+            userApp.getRoleSet().forEach(role -> log.info(role.getRoleName()));
         }
-        Assertions.assertEquals("admin@admin.com", userApp.get().getEmail());
-        Assertions.assertEquals(2,userApp.get().getRoleSet().size());
+        Assertions.assertEquals("admin@admin.com", userApp.getEmail());
+        Assertions.assertEquals(2,userApp.getRoleSet().size());
     }
     @Test
     void saveUserApp(){

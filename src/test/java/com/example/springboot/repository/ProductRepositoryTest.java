@@ -10,19 +10,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @Sql("/product.sql")
 @Slf4j
@@ -76,5 +72,7 @@ class ProductRepositoryTest {
         Page<Product> pages = productRepository.findAllByCategory_Id(3L, PageRequest.of(0,5, Sort.by("id").descending()));
         Assertions.assertEquals(5,pages.getSize());
         pages.forEach(product -> log.info(product.toString()));
+        log.info("Total elements "+String.valueOf(pages.getTotalElements()));
+        log.info("Total page "+String.valueOf(pages.getTotalPages()));
     }
 }

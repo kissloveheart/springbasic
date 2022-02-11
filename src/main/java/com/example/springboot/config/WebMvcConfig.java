@@ -1,6 +1,7 @@
 package com.example.springboot.config;
 
 import com.example.springboot.filter.RegisInterceptor;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import java.util.Locale;
 @Configuration
 @EnableAsync
 @EnableScheduling
+@EnableCaching
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {

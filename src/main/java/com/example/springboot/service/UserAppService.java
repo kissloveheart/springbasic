@@ -4,12 +4,14 @@ package com.example.springboot.service;
 import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.model.UserApp;
 import com.example.springboot.model.VerificationToken;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.Set;
 
 public interface UserAppService {
     Set<UserApp> getUserApps();
     UserApp findById(Long Id);
+
     UserApp findByEmail(String  email);
     void save(UserApp userApp);
 
@@ -24,6 +26,8 @@ public interface UserAppService {
     VerificationToken getVerificationToken(String VerificationToken);
     void depositCash(Double money);
 
-    public UserApp getCurrentUserApp();
+     UserApp getCurrentUserApp();
+
+     void clearCache(String email);
 
 }

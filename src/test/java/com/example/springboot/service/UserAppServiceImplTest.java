@@ -70,8 +70,7 @@ class UserAppServiceImplTest {
     @Test
     void findCommandByEmail() {
         UserApp userApp = new UserApp();
-        Optional<UserApp> userAppOptional = Optional.of(userApp);
-        Mockito.when(userAppRepository.findByEmail(anyString())).thenReturn(userAppOptional);
+        Mockito.when(userAppRepository.findByEmail(anyString())).thenReturn(userApp);
 
         UserAppCommand userAppCommand = new UserAppCommand();
         userAppCommand.setId(1L);

@@ -42,7 +42,6 @@ public class UserApp {
     private VerificationToken verificationToken;
 
     public void addRole(Role role){
-        role.getUserAppSet().add(this);
         this.getRoleSet().add(role);
     }
 }

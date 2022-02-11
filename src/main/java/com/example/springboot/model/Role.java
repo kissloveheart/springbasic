@@ -21,6 +21,6 @@ public class Role {
     private Long id;
     @Column(name = "Role_Name")
     private String roleName;
-    @ManyToMany(mappedBy = "roleSet")
+    @ManyToMany(mappedBy = "roleSet",fetch = FetchType.LAZY)
     private Set<UserApp> userAppSet = new HashSet<>();
 }

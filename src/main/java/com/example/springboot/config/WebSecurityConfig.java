@@ -1,5 +1,6 @@
 package com.example.springboot.config;
 
+import com.example.springboot.cache.CustomLogoutHandler;
 import com.example.springboot.jwt.JwtAuthenticationFilter;
 import com.example.springboot.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,14 @@ import javax.sql.DataSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
+    private CustomLogoutHandler logoutHandler;
+    @Autowired
+    private  DataSource dataSource;
+    @Autowired
+    private  UserDetailsServiceImpl userDetailsService;
 
-    private final DataSource dataSource;
-    private final UserDetailsServiceImpl userDetailsService;
 
-    public WebSecurityConfig(DataSource dataSource, UserDetailsServiceImpl userDetailsService) {
-        this.dataSource = dataSource;
-        this.userDetailsService = userDetailsService;
-    }
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
@@ -93,7 +94,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .failureHandler(authenticationFailureHandler)
                 // Cấu hình cho Logout Page.
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
+                .and().logout()
+                .logoutUrl("/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessUrl("/logoutSuccessful");
 
         // Cấu hình Remember Me.
         http.authorizeRequests().and().rememberMe().tokenRepository(this.persistentTokenRepository())

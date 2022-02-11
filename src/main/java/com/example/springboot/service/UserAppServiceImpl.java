@@ -8,11 +8,15 @@ import com.example.springboot.model.VerificationToken;
 import com.example.springboot.repository.TokenRepository;
 import com.example.springboot.repository.UserAppRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,12 +57,12 @@ public class UserAppServiceImpl implements UserAppService{
 
     @Override
     public UserApp findByEmail(String email) {
-        Optional<UserApp> userAppOptional = userAppRepository.findByEmail(email);
-        if(userAppOptional.isEmpty()){
+        UserApp userApp = userAppRepository.findByEmail(email);
+        if(userApp == null){
             log.warn("UserApp is not found");
             return null;
         }
-        return userAppOptional.get();
+        return userApp;
     }
 
     @Override
@@ -122,6 +126,11 @@ public class UserAppServiceImpl implements UserAppService{
         userAppRepository.save(userApp);
     }
 
+    @CacheEvict(cacheNames = "users", key = "#email")
+    public void clearCache(String email) {
+        log.info("Clear cache successfully user " + email);
+    }
+
     public UserApp getCurrentUserApp(){
         // Get user order
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -133,7 +142,7 @@ public class UserAppServiceImpl implements UserAppService{
             log.info("User not login");
             return null;
         }
-        return  userAppRepository.findByEmail(email).orElseGet(null);
+        return  userAppRepository.findByEmail(email);
     }
 
 }

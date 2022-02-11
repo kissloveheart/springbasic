@@ -44,10 +44,21 @@ public class DataLoad implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Override
-    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //roleRepository.saveAll(getRoleList());
         userAppRepository.saveAll(getUserAppList());
+       // log.info("save list user successfully");
+        userAppRepository.findByEmail("admin@admin.com").getRoleSet().forEach(role -> log.info(String.valueOf(role.getId())));
+        log.info("------------------------");
+        userAppRepository.findByEmail("admin@admin.com").getRoleSet().forEach(role -> log.info(String.valueOf(role.getId())));
+        log.info("--------- service  ------------");
+        userAppService.findByEmail("admin@admin.com").getRoleSet().forEach(role -> log.info(String.valueOf(role.getId())));
+        log.info("--------- service  ------------");
+        userAppService.findCommandByEmail("admin@admin.com").getRoleNameSet().forEach(role -> log.info(role));
+
+
+
+
 
 /*        UserApp userAppAdmin = userAppService.findByEmail("admin@admin.com");
        // testSession(userAppAdmin);
@@ -64,9 +75,9 @@ public class DataLoad implements ApplicationListener<ContextRefreshedEvent> {
             log.info(productInfo.getCategory().getName());
         });
         */
-        log.info(productRepository.findById(1L, ProductInfoDTO.class).toString());
-        ProductInfo productInfo = productRepository.findById(1L, ProductInfo.class);
-        log.info(productInfo.getCategory().getName());
+       // log.info(productRepository.findById(1L, ProductInfoDTO.class).toString());
+        //ProductInfo productInfo = productRepository.findById(1L, ProductInfo.class);
+        //log.info(productInfo.getCategory().getName());
     }
 
     public List<Role> getRoleList(){
