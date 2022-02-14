@@ -7,5 +7,4 @@ public class ProductInfoDTO {
     Long id;
     String name;
     Double price;
-
 }

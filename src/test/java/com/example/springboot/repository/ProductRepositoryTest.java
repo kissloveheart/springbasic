@@ -46,11 +46,10 @@ class ProductRepositoryTest {
 
     @Test
     void findById() {
-        ProductInfoDTO productInfoDTO =productRepository.findById(1L, ProductInfoDTO.class);
+       ProductInfoDTO productInfoDTO =productRepository.findById(1L, ProductInfoDTO.class);
         ProductInfo productInfo = productRepository.findById(2L, ProductInfo.class);
         Assertions.assertNotNull(productInfoDTO);
         Assertions.assertNotNull(productInfo);
-        log.info(productInfoDTO.toString());
         log.info(productInfo.getName());
         log.info(String.valueOf(productInfo.getPrice()));
     }
