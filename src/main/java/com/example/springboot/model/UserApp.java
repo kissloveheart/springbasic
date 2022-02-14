@@ -39,6 +39,7 @@ public class UserApp {
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @ToString.Exclude
+    @JoinColumn(name = "VerificationToken_Id")
     private VerificationToken verificationToken;
 
     @OneToMany(mappedBy = "userApp",cascade = CascadeType.ALL)

@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface ProductRepository extends CrudRepository<Product, Long> {
     <T> Collection<T> findBy(Class<T> classType);
@@ -20,4 +21,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     Collection<Product> findAllBetween(@Param("price1") Double price1, @Param("price2") Double price2);
 
     Page<Product> findAllByCategory_Id(Long id,Pageable pageable);
+    @Query("select p from Product p")
+    Page<Product> findAllProduct(Pageable pageable);
 }

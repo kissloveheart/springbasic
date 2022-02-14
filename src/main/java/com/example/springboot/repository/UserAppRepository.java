@@ -4,6 +4,8 @@ import com.example.springboot.projection.IUserALLInfoDTO;
 import com.example.springboot.model.UserApp;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -32,10 +34,6 @@ public interface UserAppRepository extends CrudRepository<UserApp,Long> {
             "from UserApp u left join VerificationToken v on v.userApp.id = u.id" +
             " left join u.roleSet r left join u.ordersSet o join o.orderDetailList od join od.product p")
     List<IUserALLInfoDTO> findAllUserAppInfo();
-
-
-
-
 
 
 }
