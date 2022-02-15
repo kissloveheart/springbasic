@@ -2,27 +2,17 @@ package com.example.springboot.repository;
 
 import com.example.springboot.model.Role;
 import com.example.springboot.model.UserApp;
-import com.example.springboot.service.UserAppService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.sql.DataSource;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import javax.persistence.PersistenceContext;
 
 @DataJpaTest
 @Sql("/createUser.sql")
@@ -33,6 +23,10 @@ class RoleRepositoryTestJpa {
 
     @Autowired private UserAppRepository userAppRepository;
     @Autowired private RoleRepository roleRepository;
+    @Autowired
+    TestEntityManager testEntityManager;
+    @PersistenceContext
+    EntityManager entityManager;
 
     private Role roleMod;
     private UserApp userApp3;
@@ -67,6 +61,8 @@ class RoleRepositoryTestJpa {
         userAppRepository.deleteById(userApp3.getId());
         roleRepository.findAll().forEach(role -> log.info(role.getRoleName()) );
     }
+
+
 
 
 }

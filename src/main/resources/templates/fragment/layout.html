@@ -45,6 +45,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/logout" th:if="${#request.userPrincipal != null}">Logout</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/schedule/create}">Schedule</a>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -98,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .addLogoutHandler(logoutHandler)
                 .logoutSuccessUrl("/logoutSuccessful");
+               // .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //add for API
 
         // Cấu hình Remember Me.
         http.authorizeRequests().and().rememberMe().tokenRepository(this.persistentTokenRepository())

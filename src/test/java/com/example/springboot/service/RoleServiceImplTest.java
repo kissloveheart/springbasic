@@ -41,5 +41,6 @@ class RoleServiceImplTest {
         Optional<Role> roleOptional = Optional.of(role);
         Mockito.when(roleRepository.findByRoleName(anyString())).thenReturn(roleOptional);
         Assertions.assertNotNull(roleService.findByRoleName(anyString()),"return role null");
+        Assertions.assertEquals("ADMIN",roleService.findByRoleName("ADMIN").getRoleName(),"return role null");
     }
 }

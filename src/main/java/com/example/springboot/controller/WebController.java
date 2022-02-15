@@ -2,7 +2,6 @@ package com.example.springboot.controller;
 
 import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.listener.OnRegistrationCompleteEvent;
-import com.example.springboot.model.UserApp;
 import com.example.springboot.model.VerificationToken;
 import com.example.springboot.service.OrdersService;
 import com.example.springboot.service.ProductService;
@@ -32,17 +31,26 @@ import java.util.Calendar;
 @Slf4j
 public class WebController {
     @Autowired
-    ApplicationEventPublisher eventPublisher;
-    @Autowired
     private UserAppService userAppService;
-    @Autowired
-    private SecurityUtils securityUtils;
     @Autowired
     private UserAppCommandValidator userAppCommandValidator;
     @Autowired
     private ProductService productService;
     @Autowired
     private OrdersService ordersService;
+
+    private SecurityUtils securityUtils;
+
+    public WebController(SecurityUtils securityUtils) {
+        this.securityUtils = securityUtils;
+    }
+
+    private ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    public void setEventPublisher(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+    }
 
     @InitBinder("userApp")
     public void customizeBinding(WebDataBinder binder) {
