@@ -1,5 +1,6 @@
 package com.example.springboot.service;
 
+import com.example.springboot.activemq.Producer;
 import com.example.springboot.dto.OrderInfoDTO;
 import com.example.springboot.handler.OrderTransactionException;
 import com.example.springboot.model.OrderDetail;
@@ -11,12 +12,9 @@ import com.example.springboot.repository.ProductRepository;
 import com.example.springboot.repository.UserAppRepository;
 import com.example.springboot.session.CartInfo;
 import com.example.springboot.session.CartLineInfo;
-import com.example.springboot.utils.SecurityUtils;
 import com.example.springboot.utils.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +39,9 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     UserAppService userAppService;
+
+    @Autowired
+    Producer producer;
 
 
     @Override
@@ -100,6 +101,8 @@ public class OrdersServiceImpl implements OrdersService {
         tipMoneyForAdmin();
         CartInfo cartInfo = SessionUtil.getCartInSession(request);
         Orders orders = saveOrder(cartInfo);
+        //send message to queue
+        producer.send(orders);
         return orders.getId();
     }
 

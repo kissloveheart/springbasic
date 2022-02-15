@@ -1,5 +1,6 @@
 package com.example.springboot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +23,12 @@ public class Orders {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_Id")
+    @ToString.Exclude
+    @JsonIgnore
     private UserApp userApp;
     @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonIgnore
     private List<OrderDetail> orderDetailList = new ArrayList<>();
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate = new Date();

@@ -1,11 +1,10 @@
 package com.example.springboot.config;
 
 import com.example.springboot.filter.RegisInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.TaskScheduler;
@@ -18,12 +17,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Locale;
 
 @Configuration
 @EnableAsync
 @EnableScheduling
 @EnableCaching
+@Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
@@ -61,6 +63,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 60 minutes
         resolver.setCookieMaxAge(60*60);
         return resolver;
+    }
+
+    @PostConstruct
+    public void postConstruct(){
+        log.info("Initial application bean");
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        log.info("Destroy application bean");
     }
 
 }

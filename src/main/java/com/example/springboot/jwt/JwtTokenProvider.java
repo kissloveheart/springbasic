@@ -1,12 +1,12 @@
 package com.example.springboot.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -59,13 +59,5 @@ public class JwtTokenProvider {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(authToken));
     }
 
-    @PostConstruct
-    public void postConstruct(){
-        log.info("Initial jwt bean");
-    }
 
-    @PreDestroy
-    public void preDestroy(){
-        log.info("Destroy jwt bean");
-    }
 }

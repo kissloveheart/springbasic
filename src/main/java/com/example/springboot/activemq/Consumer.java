@@ -1,50 +1,38 @@
 package com.example.springboot.activemq;
 
+import com.example.springboot.model.Orders;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.qpid.jms.JmsConnectionFactory;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.handler.annotation.Headers;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Component;
 
-import javax.jms.*;
+import javax.jms.Message;
+import javax.jms.Session;
 
+import static com.example.springboot.activemq.JmsConfig.ORDER_IN_QUEUE;
+import static com.example.springboot.activemq.JmsConfig.ORDER_OUT_QUEUE;
 
+@Component
+@Slf4j
 public class Consumer {
-    public static void main(String[] args) throws JMSException {
 
-        System.out.println("Create a ConnectionFactory");
-        // ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        ConnectionFactory connectionFactory = new JmsConnectionFactory("amqp://localhost:5672");
+    @SendTo(ORDER_OUT_QUEUE)
+    @JmsListener(destination = ORDER_IN_QUEUE)
+    public String receiveMessage(@Payload Orders order,
+                               @Headers MessageHeaders headers,
+                               Message message, Session session) {
+        log.info("received <" + order + ">");
 
-        System.out.println("Create a Connection");
-        Connection connection = connectionFactory.createConnection("admin", "admin");
-        connection.start();
-
-        System.out.println("Create a Session");
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-        System.out.println("Create a Topic/ Queue based on the given parameter");
-        Destination destination = null;
-        if (args.length > 0 && args[0].equalsIgnoreCase("QUEUE")) {
-            destination = session.createQueue("jms-queue");
-        } else if (args.length > 0 && args[0].equalsIgnoreCase("TOPIC")) {
-            destination = session.createTopic("jms-topic");
-        } else {
-            System.out.println("Error: You must specify Queue or Topic");
-            connection.close();
-            System.exit(1);
-        }
-
-        System.out.println("Create a Consumer to receive messages from one Topic or Queue.");
-        MessageConsumer consumer = session.createConsumer(destination);
-
-        System.out.println("Start receiving messages ... ");
-        String body;
-        do {
-            Message msg = consumer.receive();
-            body = ((TextMessage) msg).getText();
-            System.out.println("Received = " + body);
-        } while (!body.equalsIgnoreCase("close"));
-
-        System.out.println("Shutdown JMS connection and free resources");
-        connection.close();
-        System.exit(1);
+        log.info("- - - - - - - - - - - - - - - - - - - - - - - -");
+        log.info("######          Message Details           #####");
+        log.info("- - - - - - - - - - - - - - - - - - - - - - - -");
+        log.info("headers: " + headers);
+        log.info("message: " + message);
+        log.info("session: " + session);
+        log.info("- - - - - - - - - - - - - - - - - - - - - - - -");
+        return order.toString();
     }
 }

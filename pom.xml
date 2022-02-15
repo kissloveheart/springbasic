@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>springboot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>springboot</name>
     <description>springboot</description>
@@ -146,6 +146,21 @@
             <version>0.50.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
 
     </dependencies>
 
@@ -194,6 +209,21 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
+            <!-- include all the dependencies into the jar for easier to execute the application -->
+            <!-- https://mvnrepository.com/artifact/org.fusesource.mvnplugins/maven-uberize-plugin -->
+<!--            <plugin>
+                <groupId>org.fusesource.mvnplugins</groupId>
+                <artifactId>maven-uberize-plugin</artifactId>
+                <version>1.45</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>uberize</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
     </build>
 
