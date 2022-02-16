@@ -3,6 +3,7 @@ package com.example.springboot.controller;
 import com.example.springboot.command.UserAppCommand;
 import com.example.springboot.listener.OnRegistrationCompleteEvent;
 import com.example.springboot.model.VerificationToken;
+import com.example.springboot.scheduled.TaskSchedulingService;
 import com.example.springboot.service.OrdersService;
 import com.example.springboot.service.ProductService;
 import com.example.springboot.service.UserAppService;
@@ -38,6 +39,8 @@ public class WebController {
     private ProductService productService;
     @Autowired
     private OrdersService ordersService;
+    @Autowired
+    private TaskSchedulingService taskSchedulingService;
 
     private SecurityUtils securityUtils;
 

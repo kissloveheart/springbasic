@@ -4,7 +4,6 @@ import com.example.springboot.scheduled.TaskDefinition;
 import com.example.springboot.scheduled.TaskDefinitionRunable;
 import com.example.springboot.scheduled.TaskSchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +14,9 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/schedule")
-@Scope("prototype")
 public class JobSchedulingController {
     @Autowired
     private TaskSchedulingService taskSchedulingService;
-
-    static int countInitiate;
-
-    public JobSchedulingController() {
-        countInitiate++;
-        System.out.println("Bean scheduling initiate count " + countInitiate);
-    }
 
     @GetMapping("/list")
     @ResponseBody

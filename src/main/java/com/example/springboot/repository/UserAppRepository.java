@@ -1,11 +1,9 @@
 package com.example.springboot.repository;
 
-import com.example.springboot.projection.IUserALLInfoDTO;
 import com.example.springboot.model.UserApp;
+import com.example.springboot.projection.IUserALLInfoDTO;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UserAppRepository extends CrudRepository<UserApp,Long> {
-    @Query("select u from UserApp u join fetch u.roleSet where u.email =:email")
+   @Query("select u from UserApp u join fetch u.roleSet where u.email =:email")
     @Cacheable(cacheNames = "users", key = "#email")
     UserApp findByEmail(@Param("email") String email);
 

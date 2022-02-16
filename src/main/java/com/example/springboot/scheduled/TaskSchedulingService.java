@@ -13,9 +13,17 @@ import java.util.concurrent.ScheduledFuture;
 
 @Service
 @Slf4j
+//@Scope("prototype")
 public class TaskSchedulingService {
     @Autowired
     private TaskScheduler taskScheduler;
+
+    static int countInitiate;
+
+    public TaskSchedulingService() {
+        countInitiate++;
+        System.out.println("Bean scheduling initiate count " + countInitiate);
+    }
 
     Map<String, ScheduledFuture<?>> jobsMap = new HashMap<>();
 
